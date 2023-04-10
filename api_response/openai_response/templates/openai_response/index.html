@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>OpenAI Demo</title>
+  </head>
+  <body>
+    <form id="openai-form">
+      {% csrf_token %}
+      <label for="question">Enter your question:</label>
+      <input type="text" id="question" name="question">
+      <button type="submit">Submit</button>
+    </form>
+    <div id="answer"></div>
+
+    <script>
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+
+      const openaiForm = document.querySelector('#openai-form');
+      const answerDiv = document.querySelector('#answer');
+      const csrfToken = getCookie('csrftoken');
+
+      openaiForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const questionInput = document.querySelector('#question');
+        const question = questionInput.value;
+
+        fetch('/openai/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+          },
+          body: JSON.stringify({
+            question: question,
+          }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          answerDiv.innerHTML = data.answer;
+        });
+      });
+    </script>
+  </body>
+</html>
