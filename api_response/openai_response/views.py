@@ -4,12 +4,13 @@ from django.shortcuts import render
 import openai
 import json
 from .serializers import AnswerSerializer
+from .key import API_KEY
 
 class OpenAIView(View):
     def post(self, request):
         data = json.loads(request.body)
         question = data.get('question')
-        openai.api_key = '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'
+        openai.api_key = API_KEY
         response = openai.Completion.create(
             engine='curie',
             prompt=question,
