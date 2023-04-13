@@ -49,6 +49,15 @@ Install dependencies
 
 Start the server
 
+
+```bash
+  python manage.py makemigrations
+```
+
+```bash
+  python manage.py migrate
+```
+
 ```bash
   python manage.py runserver
 ```
